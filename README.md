@@ -30,3 +30,14 @@ The deployment terminal is set to 80 columns by 24 rows. That means that each li
 ---
 
 Happy coding!
+
+
+# CEDAS
+The Cheesecake Emporium Data Automation System. 
+
+## What is The Cheesecake Emporium? 
+The Cheesecake Emporium is a hypothetical Cheesecake company who have requested a data automation program that helps them to reduce waste and increase their sales numbers. Currently they have a set number of stock arriving daily and are loosing sales due to stock not being sold.
+
+## Why use CEDAS?
+
+The aim of CEDAS is to provide an automated program that will assist in monitoring and increasing sales whilst reducing waste by altering stock numbers and in turn should help owners manage sales, stock and more, Efficiently by requesting data stored in an API (Application Programming Interface). owners can then request and return most recent numbers and any manipulated data for review. 
