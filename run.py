@@ -21,17 +21,26 @@ SHEET = GSPREAD_CLIENT.open('CEDAS')
 def get_sales_figures():
     """ 
     gets sales figures from user input
-    function logic: get_sales_figures runs a while loop until 
-    the correct amount of values are fed in. (for this data 
-    set it is 7 numerical values that are required for data 
-    to be valid) 
+    function logic: get_sales_figures runs a while loop to 
+    check for any user input error. This includes not enough 
+    numerical values, text instead of numerical values, too
+    too many numerical values (for this data 
+    set to be valid, it is seven numerical values that are 
+    required for input) 
     """
-
+# while True:
     print("Please enter most recent sales figures.")
     print("Data input should consist of seven numbers separated by commas.")
     print("Example data: 1,2,3,4,5,6,7\n")
 
-    figure_str = input("Enter your sales figures here: \n")
-    print(f"The Data Provided is as follows: {figure_str}\n")
+    figure_str = input("Enter your sales figures here: \n") 
+
+    sales_figures = figure_str.split(',')
+    print(sales_figures)
+
+    # if validate_data(sales_figures):
+       #  print("DATA PROVIDED IS VALID!")
+       #  break
+#return sales_figures
 
 get_sales_figures()

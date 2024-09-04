@@ -56,10 +56,22 @@ Before implementing the dynamic system that CEDAS offers, the owners of Cheeseca
 
 ## Testing
 ### bugs
-    First bug encountered was to do with linking the workspace to the API. I had written google.oauth.service_account when it should have been google.oauth2.service_account. 
+API not linking 
+My API that I had generated using google sheets wasn't connecting I had written google.oauth.service_account when it should have been google.oauth2.service_account. 
+    
+Infinite while loop 
+This was human error as I'd accidentally put my programme into an infinte while loop requesting data due to no 'if' statement even though data had been input. I also forgot to comment out prior code for testing if the API was successfully connected which could have been a contributing factor.
+
 ### solved bugs
-    To solve this first bug, It turned out I'd missed a numerical value in the command. Once corrected the error was squashed and programme ran as expected.
+
+API not linking 
+It turned out I'd missed a numerical value in the command. Once corrected the error was squashed and programme ran as expected.
+
+Infinite while loop 
+to get myself out of the while loop I sent the command 'exit()' this still didn't work and I'd realized that this command is specific for python shell. I then tried CTRL-C which worked and the while loop stopped. Once stopped I commented out the code that I used to check that the API was connected. On fixing the while loop by removing the partially written loop I had output as expected.
+
 ### remaining bugs
+
 ### PEP8 validation
 
 ## Deployment Instructions
@@ -67,6 +79,7 @@ Before implementing the dynamic system that CEDAS offers, the owners of Cheeseca
 CEDAS was deployed to both Github and Heroku. 
 
 reasons for deploying to Github was to monitor version control.
+
 ### Github Clone
 To clone a copy of CEDAS from the Github repository, please follow these steps:
 
