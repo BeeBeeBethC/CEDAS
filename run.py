@@ -85,6 +85,21 @@ def calculate_surplus_figures(sales_row):
     
     return surplus_figures
 
+def get_last_5_figures_sales():
+    """ 
+    collects columns of figures and collects last 5 entries 
+    for each cheesecake and returns this data as a list of lists
+    """
+    sales = SHEET.worksheet("sales")
+    # column = sales.col_values(4)
+    # print(column)
+    columns = []
+    for ind in range(1, 8):
+        column = sales.col_values(ind)
+        columns.append(column[-5:])
+
+    return columns
+
 def main():
     """
     Runs all functions declared
@@ -94,6 +109,9 @@ def main():
     update_worksheet(sales_figures, "sales")
     new_surplus_figures = calculate_surplus_figures(sales_figures)
     update_worksheet(new_surplus_figures, "surplus")
+    
 
 print("Welcome to CEDAS, The Cheesecake Emporium Data Automation System.\n")
-main()
+# main()
+
+sales_columns = get_last_5_figures_sales()
