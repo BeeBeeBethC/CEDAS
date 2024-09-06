@@ -100,6 +100,22 @@ def get_last_5_figures_sales():
 
     return columns
 
+def calculate_stock_figures(figures):
+    """
+    calculates average stock figures generating dynamic
+    stock order recommendations
+    """
+    print("Calculating Stock Figures Please Wait...\n")
+    new_stock_figures = []
+    
+    for column in figures:
+        int_column = [int(num) for num in column]
+        average = sum(int_column) / len(int_column)
+        stock_num = average * 1.1
+        new_stock_figures.append(round(stock_num))
+
+    print(new_stock_figures)
+
 def main():
     """
     Runs all functions declared
@@ -109,9 +125,10 @@ def main():
     update_worksheet(sales_figures, "sales")
     new_surplus_figures = calculate_surplus_figures(sales_figures)
     update_worksheet(new_surplus_figures, "surplus")
+    sales_columns = get_last_5_figures_sales()
+    stock_data = calculate_stock_figures(sales_columns)
     
 
 print("Welcome to CEDAS, The Cheesecake Emporium Data Automation System.\n")
-# main()
 
-sales_columns = get_last_5_figures_sales()
+main()
