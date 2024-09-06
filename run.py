@@ -114,7 +114,7 @@ def calculate_stock_figures(figures):
         stock_num = average * 1.1
         new_stock_figures.append(round(stock_num))
 
-    print(new_stock_figures)
+    return new_stock_figures
 
 def main():
     """
@@ -126,9 +126,8 @@ def main():
     new_surplus_figures = calculate_surplus_figures(sales_figures)
     update_worksheet(new_surplus_figures, "surplus")
     sales_columns = get_last_5_figures_sales()
-    stock_data = calculate_stock_figures(sales_columns)
-    
+    stock_figures = calculate_stock_figures(sales_columns)
+    update_worksheet(stock_figures, "stock")
 
 print("Welcome to CEDAS, The Cheesecake Emporium Data Automation System.\n")
-
 main()
