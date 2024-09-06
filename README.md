@@ -63,7 +63,10 @@ Infinite while loop
 This was human error as I'd accidentally put my programme into an infinte while loop requesting data due to no 'if' statement even though data had been input. I also forgot to comment out prior code for testing if the API was successfully connected which could have been a contributing factor.
 
 Unable to update sales worksheet
-This was due to human error not providing correct commands therefore the programme wopuld not run or update and kept throwing an error back(see screenshot) in and not updating the corresponding sheet
+This was due to human error not providing correct commands therefore the programme wopuld not run or update and kept throwing an error back(see screenshot) in and not updating the corresponding sheet.
+
+unable to return stock averages
+due to an undefined variable it kept throwing back an error.
 
 ### solved bugs
 
@@ -75,6 +78,9 @@ to get myself out of the while loop I sent the command 'exit()' this still didn'
 
 Unable to update sales worksheet
 by providing correct commands to the programme, it was able to identify what I wanted it to do and update successfully as shown in the screenshot below highlighted by the values in Blue. 
+
+unable to return stock averages
+once defining the variables under the main function, code was running as expected and returning stock values to terminal. 
 
 ### remaining bugs
 
