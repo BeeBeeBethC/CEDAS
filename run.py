@@ -62,27 +62,11 @@ def validate_figures(values):
 
     return True
 
-def update_sales_worksheet(figures):
-    """
-    update Sales Worksheet by adding a new row of data using the
-    figures provided. 
-    """
-    # feedback provided in terminal.
-    print("Updating Figures to corresponding worksheet...\n")
-    figures_worksheet = SHEET.worksheet("sales")
-    figures_worksheet.append_row(figures)
-    print("Figures Updated Successfully!\n")
-
-def update_surplus_worksheet(figures):
-    """
-    update Surplus Worksheet by adding a new row of data using the
-    figures provided. 
-    """
-    # feedback provided in terminal.
-    print("Updating Figures to corresponding worksheet...\n")
-    figures_worksheet = SHEET.worksheet("surplus")
-    figures_worksheet.append_row(figures)
-    print("Surplus Figures Updated Successfully!\n")
+def update_worksheet(figures, worksheet):
+    print(f"updating {worksheet} worksheet... \n")
+    worksheet_to_update = SHEET.worksheet(worksheet)
+    worksheet_to_update.append_row(figures)
+    print(f"{worksheet} worksheet updated successfully\n")
 
 def calculate_surplus_figures(sales_row):
     """
@@ -107,9 +91,9 @@ def main():
     """
     figures = get_sales_figures()
     sales_figures = [int(num) for num in figures]
-    update_sales_worksheet(sales_figures)
+    update_worksheet(sales_figures, "sales")
     new_surplus_figures = calculate_surplus_figures(sales_figures)
-    update_surplus_worksheet(new_surplus_figures)
+    update_worksheet(new_surplus_figures, "surplus")
 
 print("Welcome to CEDAS, The Cheesecake Emporium Data Automation System.\n")
 main()
