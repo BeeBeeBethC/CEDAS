@@ -62,8 +62,8 @@ My API that I had generated using google sheets wasn't connecting I had written 
 Infinite while loop 
 This was human error as I'd accidentally put my programme into an infinte while loop requesting data due to no 'if' statement even though data had been input. I also forgot to comment out prior code for testing if the API was successfully connected which could have been a contributing factor.
 
-unable to update sales worksheet
-this was due to human error not providing correct information in order for the programme to run and updating the corresponding sheet
+Unable to update sales worksheet
+This was due to human error not providing correct commands therefore the programme wopuld not run or update and kept throwing an error back(see screenshot) in and not updating the corresponding sheet
 
 ### solved bugs
 
@@ -73,8 +73,8 @@ It turned out I'd missed a numerical value in the command. Once corrected the er
 Infinite while loop 
 to get myself out of the while loop I sent the command 'exit()' this still didn't work and I'd realized that this command is specific for python shell. I then tried CTRL-C which worked and the while loop stopped. Once stopped I commented out the code that I used to check that the API was connected. On fixing the while loop by removing the partially written loop I had output as expected.
 
-unable to update sales worksheet
-by providing correct information to the programme, it was able to identify what I wanted it to do and update successfully. 
+Unable to update sales worksheet
+by providing correct commands to the programme, it was able to identify what I wanted it to do and update successfully as shown in the screenshot below highlighted by the values in Blue. 
 
 ### remaining bugs
 

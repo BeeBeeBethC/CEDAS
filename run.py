@@ -73,6 +73,23 @@ def update_sales_worksheet(figures):
     figures_worksheet.append_row(figures)
     print("Figures Updated Successfully!\n")
 
-figures = get_sales_figures()
-sales_figures = [int(num) for num in figures]
-update_sales_worksheet(sales_figures)
+def calculate_surplus_figures(sales_row):
+    """
+    compare sales figures with stock figures. 
+    """
+    print("Calculating Surplus Figures...\n")
+    stock = SHEET.worksheet("stock").get_all_values()
+    stock_row = stock[-1]
+    print(stock_row)
+
+def main():
+    """
+    Runs all functions declared
+    """
+    figures = get_sales_figures()
+    sales_figures = [int(num) for num in figures]
+    update_sales_worksheet(sales_figures)
+    calculate_surplus_figures(sales_figures)
+
+print("Welcome to CEDAS, The Cheesecake Emporium Data Automation System.\n")
+main()
