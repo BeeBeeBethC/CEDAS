@@ -73,11 +73,22 @@ def update_sales_worksheet(figures):
     figures_worksheet.append_row(figures)
     print("Figures Updated Successfully!\n")
 
+def update_surplus_worksheet(figures):
+    """
+    update Surplus Worksheet by adding a new row of data using the
+    figures provided. 
+    """
+    # feedback provided in terminal.
+    print("Updating Figures to corresponding worksheet...\n")
+    figures_worksheet = SHEET.worksheet("surplus")
+    figures_worksheet.append_row(figures)
+    print("Surplus Figures Updated Successfully!\n")
+
 def calculate_surplus_figures(sales_row):
     """
     compare sales figures with stock figures. 
     the zip method used with a for loop allows us to run through
-    and iterate the lists simultaneously.
+    and iterate two lists simultaneously.
     """
     print("Calculating Surplus Figures...\n")
     stock = SHEET.worksheet("stock").get_all_values()
@@ -98,7 +109,7 @@ def main():
     sales_figures = [int(num) for num in figures]
     update_sales_worksheet(sales_figures)
     new_surplus_figures = calculate_surplus_figures(sales_figures)
-    print(new_surplus_figures)
+    update_surplus_worksheet(new_surplus_figures)
 
 print("Welcome to CEDAS, The Cheesecake Emporium Data Automation System.\n")
 main()
