@@ -35,12 +35,12 @@ def get_sales_figures():
 
         figure_str = input("Enter your sales figures here: \n") 
 
-        sales_figures = figure_str.split(',')
+        figures = figure_str.split(',')
     
-        if validate_figures(sales_figures):
-            print("DATA PROVIDED IS VALID!")
+        if validate_figures(figures):
+            print("FIGURES PROVIDED ARE VALID!")
             break
-    return sales_figures
+    return figures
 
 def validate_figures(values):
     """
@@ -62,5 +62,17 @@ def validate_figures(values):
 
     return True
 
+def update_sales_worksheet(figures):
+    """
+    update Sales Worksheet by adding a new row of data using the
+    figures provided. 
+    """
+    # feedback provided in terminal.
+    print("Updating Figures to corresponding worksheet...\n")
+    figures_worksheet = SHEET.worksheet("sales")
+    figures_worksheet.append_row(figures)
+    print("Figures Updated Successfully!\n")
 
-get_sales_figures()
+figures = get_sales_figures()
+sales_figures = [int(num) for num in figures]
+update_sales_worksheet(sales_figures)
