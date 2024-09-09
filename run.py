@@ -91,8 +91,6 @@ def get_last_5_figures_sales():
     for each cheesecake and returns this data as a list of lists
     """
     sales = SHEET.worksheet("sales")
-    # column = sales.col_values(4)
-    # print(column)
     columns = []
     for ind in range(1, 8):
         column = sales.col_values(ind)
@@ -119,6 +117,8 @@ def calculate_stock_figures(figures):
 def order_new_stock():
     """
     Displays stock to order in the terminal ready for the next day.
+    using the enumerate function, it takes the collection of data 
+    and returns it in a paired list for example {'Lemon': '7'}
     """
     print("Retrieving stock to order...\n")
     stock = SHEET.worksheet("stock").get_all_values()
