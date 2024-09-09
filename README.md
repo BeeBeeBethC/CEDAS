@@ -128,5 +128,32 @@ PLEASE NOTE: the steps followed above will provide the code only. to access the 
 ### Heroku Deployment
 
 WRITE OUT HEROKU DEPLOYMENT
+1. Create your list of requirements by navigating to the requirements.txt file. each package is known as a dependency so therefore should be located in this file when uploading to heroku so that Heroku itself can still open your project. 
+
+2. To create your list of requirements, type in the gitpod (or code terminal of your choice) "pip3 freeze > requitements.txt" ensuring you have the exact same spelling, all lower case for the exact file name or this will not work.
+
+3. Commit and push most recent code upto github.
+
+4. If not done already, sign-up or login to heroku.
+
+5. navigate to your heroku dashboard. 
+
+6. from the heroku dashboard, create a new app and name it. each app name needs to be unique or it wont accept it.
+7. select region. 
+8. make sure your settings have been set before you deploy! 
+9. if settings are not declared, here are the steps for checking settings before deployment. 
+    9.1. find the config vars, environmental variables section of the heroku settings. In this tab "Reveal config vars" this is where you put sensitive information for example creds.json that can't be shown publicly.
+    for more compatibility, also add another config var to heroku settings which is a port key: PORT value is 8000. this ensures a much smoother deployment as projects may not deploy if not added in.
+10. navigate to add build pack. select "python" and click save changes then find "node.js" and click save changes. 
+
+NOTE: If these two packages are the opposite way round you can click and drag them so that python pack is on top and node.js is below python. 
+
+11. For this project there is the choice of automatic deployment or manual. For CEDAS I have chosen to manually deploy it which means that it won't automatically update from pushed changes but it does show deployment logs. 
+
+12. To update the project once deployment has complete, navigate to  
+
+13. Once the project has been deployed you should recieve a message stating that "project was successfully deployed" and you should be able to click a link that takes you to the application terminal where you can run your code in Heroku. 
+
+14. In the heroku terminal there is no need to run python3 run.py as the programme is already running, to restart this programme you can click the red button at the top that states "run programme" and has a play symbol on it.  
 
 ## Credits

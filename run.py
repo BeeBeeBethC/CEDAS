@@ -16,7 +16,7 @@ SHEET = GSPREAD_CLIENT.open('CEDAS')
 
 # data = sales.get_all_values()
 
-# print(data) commented out as working
+# print(data) commented out as working(row 1)
 
 def get_sales_figures():
     """ 
@@ -33,7 +33,7 @@ def get_sales_figures():
         print("Data input should consist of seven numbers separated by commas.")
         print("Example data: 1,2,3,4,5,6,7\n")
 
-        figure_str = input("Enter your sales figures here: \n") 
+        figure_str = input("Enter your sales figures here:\n") 
 
         figures = figure_str.split(',')
     
@@ -116,6 +116,21 @@ def calculate_stock_figures(figures):
 
     return new_stock_figures
 
+def order_new_stock():
+    """
+    Displays stock to order in the terminal ready for the next day.
+    """
+    print("Retrieving stock to order...\n")
+    stock = SHEET.worksheet("stock").get_all_values()
+    headers = stock[0]
+    last_row = stock[-1]
+    To_order = {}
+
+    for i, header in enumerate(headers):
+        To_order[header] = last_row[i]
+
+    print(To_order)
+
 def main():
     """
     Runs all functions declared
@@ -128,6 +143,7 @@ def main():
     sales_columns = get_last_5_figures_sales()
     stock_figures = calculate_stock_figures(sales_columns)
     update_worksheet(stock_figures, "stock")
+    order_new_stock()
 
 print("Welcome to CEDAS, The Cheesecake Emporium Data Automation System.\n")
 main()
