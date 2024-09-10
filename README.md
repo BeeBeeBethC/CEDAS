@@ -44,7 +44,9 @@ The aim of CEDAS is to provide an automated program that will assist in monitori
 
 ## How to use CEDAS
 
-(STEP BY STEP INSTRUCTIONS FOR HOW TO USE APPLICATION.)
+Welcome to CEDAS. please follow the steps below to use the system correctly.
+
+(COMPLETE STEPS!)
 
 ## Existing Features
 
@@ -139,18 +141,22 @@ WRITE OUT HEROKU DEPLOYMENT
 5. navigate to your heroku dashboard. 
 
 6. from the heroku dashboard, create a new app and name it. each app name needs to be unique or it wont accept it.
+
 7. select region. 
+
 8. make sure your settings have been set before you deploy! 
+
 9. if settings are not declared, here are the steps for checking settings before deployment. 
     9.1. find the config vars, environmental variables section of the heroku settings. In this tab "Reveal config vars" this is where you put sensitive information for example creds.json that can't be shown publicly.
     for more compatibility, also add another config var to heroku settings which is a port key: PORT value is 8000. this ensures a much smoother deployment as projects may not deploy if not added in.
+
 10. navigate to add build pack. select "python" and click save changes then find "node.js" and click save changes. 
 
 NOTE: If these two packages are the opposite way round you can click and drag them so that python pack is on top and node.js is below python. 
 
 11. For this project there is the choice of automatic deployment or manual. For CEDAS I have chosen to manually deploy it which means that it won't automatically update from pushed changes but it does show deployment logs. 
 
-12. To update the project once deployment has complete, navigate to  
+12. To update the project once deployment has complete, navigate to FINISH THIS OFF! 
 
 13. Once the project has been deployed you should recieve a message stating that "project was successfully deployed" and you should be able to click a link that takes you to the application terminal where you can run your code in Heroku. 
 
