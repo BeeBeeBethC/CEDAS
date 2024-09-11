@@ -18,6 +18,27 @@ SHEET = GSPREAD_CLIENT.open('CEDAS')
 
 # print(data) commented out as working(row 1)
 
+def display_menu():
+    print("Welcome to S-DAS, The Stock-Data Automation System.\n")
+    print("Please select: \n")
+    print("Option 1 to run S-DAS\n")
+    print("Option 2 for Instructions\n")
+    print("Option 3 to Exit\n")
+
+def handle_menu_choice(choice):
+    if choice == "1":
+        print("Option 1 selected. Application Running")
+        run_application()
+    elif choice == "2":
+        print("Option 2 selected. Please wait for instructions to show")
+        application_instructions()
+    elif choice == "3":
+        print("Option 3 selected.")
+        print("Thank you for Using S-DAS")
+        print("Exiting program now.")
+    else:
+        print("Invalid choice. Please select a number between 1 and 3. Alternatively choose Option 2 - Instructions.")
+
 def get_sales_figures():
     """ 
     gets sales figures from user input
@@ -131,9 +152,11 @@ def order_new_stock():
 
     print(To_order)
 
-def main():
+def run_application():
     """
-    Runs all functions declared
+    when option 1 is selected from the menu, it runs all 
+    other functions before looping back round and 
+    displays menu until user chooses the exit function.
     """
     figures = get_sales_figures()
     sales_figures = [int(num) for num in figures]
@@ -145,5 +168,22 @@ def main():
     update_worksheet(stock_figures, "stock")
     order_new_stock()
 
-print("Welcome to CEDAS, The Cheesecake Emporium Data Automation System.\n")
-main()
+def main():
+    """
+    Runs an indefinite loop displaying and handling the users choice
+    breaks out of loop if user selects option '3'
+    """
+    while True:
+        display_menu()
+        choice = input("Select your Option: ")
+        handle_menu_choice(choice)
+        if choice == "3":
+            break
+
+if __name__ == "__main__":
+    main()
+
+
+    
+
+# main()
