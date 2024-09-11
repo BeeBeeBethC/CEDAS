@@ -27,17 +27,17 @@ def display_menu():
 
 def handle_menu_choice(choice):
     if choice == "1":
-        print("Option 1 selected. Application Running")
+        print("Option 1 selected. Application Running\n")
         run_application()
     elif choice == "2":
-        print("Option 2 selected. Please wait for instructions to show")
-        application_instructions()
+        print("Option 2 selected. Please wait for instructions to show.\n")
+        how_to_use()
     elif choice == "3":
-        print("Option 3 selected.")
-        print("Thank you for Using S-DAS")
+        print("Option 3 selected.\n")
+        print("Thank you for Using S-DAS\n")
         print("Exiting program now.")
     else:
-        print("Invalid choice. Please select a number between 1 and 3. Alternatively choose Option 2 - Instructions.")
+        print("Invalid choice. Please select a number between 1 and 3. Alternatively choose Option 2 - Instructions.\n")
 
 def get_sales_figures():
     """ 
@@ -156,7 +156,7 @@ def run_application():
     """
     when option 1 is selected from the menu, it runs all 
     other functions before looping back round and 
-    displays menu until user chooses the exit function.
+    displays menu until user chooses option 3.
     """
     figures = get_sales_figures()
     sales_figures = [int(num) for num in figures]
@@ -168,6 +168,17 @@ def run_application():
     update_worksheet(stock_figures, "stock")
     order_new_stock()
 
+def how_to_use():
+    """
+    Instructions on how to use S-DAS
+    add to as functions multiply!
+    """
+    print("Select function from menu options using numbers 1-3, press Enter.\n")
+    print("Option 1, Type in sales figures to corresponding cheesecake flavours, press Enter\n")
+    print("Allow the programme run all the functions shown in the terminal it will return you to the main menu once complete.\n")
+    print("Option 2, Takes you to instructions on how to use S-DAS (You are currently here.)\n")
+    print("Option 3, Exits the program\n")
+
 def main():
     """
     Runs an indefinite loop displaying and handling the users choice
@@ -175,7 +186,7 @@ def main():
     """
     while True:
         display_menu()
-        choice = input("Select your Option: ")
+        choice = input("Select your Option: \n")
         handle_menu_choice(choice)
         if choice == "3":
             break
