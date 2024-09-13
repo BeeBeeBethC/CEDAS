@@ -1,5 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials
+from datetime import datetime
+from prettytable import PrettyTable
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -21,9 +23,9 @@ SHEET = GSPREAD_CLIENT.open('CEDAS')
 def display_menu():
     print("Welcome to S-DAS, The Stock-Data Automation System.\n")
     print("Please select: \n")
-    print("Option 1 to run S-DAS\n")
-    print("Option 2 for Instructions\n")
-    print("Option 3 to Exit\n")
+    print("Press '1' to run S-DAS\n")
+    print("Press '2' for Instructions\n")
+    print("Press '3' to Exit\n")
 
 def handle_menu_choice(choice):
     if choice == "1":
@@ -37,56 +39,25 @@ def handle_menu_choice(choice):
         print("Thank you for Using S-DAS\n")
         print("Exiting program now.")
     else:
-        print("Invalid choice. Please select a number between 1 and 3. Alternatively choose Option 2 - Instructions.\n")
+        print("Invalid choice. Please press a Number '1' '2' or '3'.\n")
+        print("Alternatively Press '2' to review Instructions.\n")
 
-def get_sales_figures():
+def fetch_headers():
+    sales_worksheet = SHEET.worksheet("sales")
+    header_figures = sales_worksheet.get_all_values()
+    header_values = header_figures[0]
+    print(f"Headers fetched: {header_figures}")
+
+def cheesecake_sold():
     """ 
-    gets sales figures from user input
-    function logic: get_sales_figures runs a while loop to 
-    check for any user input error. This includes not enough 
-    numerical values, text instead of numerical values, too
-    too many numerical values (for this data 
-    set to be valid, it is seven numerical values that are 
-    required for input) 
+    gets sales figures from user input, by flavour e.g. lemon: '7'
     """
-    while True:
-        print("Please enter most recent sales figures.")
-        print("Data input should consist of seven numbers separated by commas.")
-        print("Example data: 1,2,3,4,5,6,7\n")
-
-        figure_str = input("Enter your sales figures here:\n") 
-
-        figures = figure_str.split(',')
     
-        if validate_figures(figures):
-            print("FIGURES PROVIDED ARE VALID!")
-            break
-    return figures
 
-def validate_figures(values):
-    """
-    inside the try, converts the string values from the data
-    input into integers.
-    Raises ValueError if the string cannot be converted into
-    integers or if there arent enough data values. 
-    when using CEDAS is 7 values exactly.
-    """
-    try:
-        [int(value) for value in values]
-        if len(values) != 7:
-            raise ValueError(
-                f"Exactly 7 values are required. You provided {len(values)}"
-            )
-    except ValueError as e:
-        print(f"Invalid Data: {e}, please try again.\n")
-        return False
-
-    return True
-
-def update_worksheet(figures, worksheet):
+def update_worksheet(data_input, worksheet):
     print(f"updating {worksheet} worksheet... \n")
     worksheet_to_update = SHEET.worksheet(worksheet)
-    worksheet_to_update.append_row(figures)
+    worksheet_to_update.append_row(data_input)
     print(f"{worksheet} worksheet updated successfully\n")
 
 def calculate_surplus_figures(sales_row):
@@ -158,15 +129,15 @@ def run_application():
     other functions before looping back round and 
     displays menu until user chooses option 3.
     """
-    figures = get_sales_figures()
-    sales_figures = [int(num) for num in figures]
-    update_worksheet(sales_figures, "sales")
-    new_surplus_figures = calculate_surplus_figures(sales_figures)
-    update_worksheet(new_surplus_figures, "surplus")
-    sales_columns = get_last_5_figures_sales()
-    stock_figures = calculate_stock_figures(sales_columns)
-    update_worksheet(stock_figures, "stock")
-    order_new_stock()
+    fetch_headers()
+    # figures = cheesecake_sold()
+    # update_worksheet(inputs, "sales")
+    # new_surplus_figures = calculate_surplus_figures(sales_figures)
+    # update_worksheet(new_surplus_figures, "surplus")
+    # sales_columns = get_last_5_figures_sales()
+    # stock_figures = calculate_stock_figures(sales_columns)
+    # update_worksheet(stock_figures, "stock")
+    # order_new_stock()
 
 def how_to_use():
     """
