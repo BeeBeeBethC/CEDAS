@@ -23,7 +23,7 @@ SHEET = GSPREAD_CLIENT.open('CEDAS')
 def display_menu():
     print("Welcome to S-DAS, The Stock-Data Automation System.\n")
     print("Please select: \n")
-    print("Press '1' to run S-DAS\n")
+    print("Press '1' to run the application\n")
     print("Press '2' for Instructions\n")
     print("Press '3' to Exit\n")
 
@@ -43,21 +43,41 @@ def handle_menu_choice(choice):
         print("Alternatively Press '2' to review Instructions.\n")
 
 def fetch_headers():
-    sales_worksheet = SHEET.worksheet("sales")
-    header_figures = sales_worksheet.get_all_values()
-    header_values = header_figures[0]
-    print(f"Headers fetched: {header_figures}")
-
-def cheesecake_sold():
-    """ 
-    gets sales figures from user input, by flavour e.g. lemon: '7'
     """
+    retrieves Headers (flavours) from the spreadsheet and displays. 
+    for loop now added in to loop over each flavour and requesting 
+    user input for quantity sold and asking users to confirm is 
+    correct. 
+    """
+    worksheet = SHEET.worksheet('sales')
+    headers = worksheet.row_values(1)
+    print("DEBUG: headers fetched:", headers)
+    return headers
     
+def handle_dictionary_input(headers):
+    collected_data = []
+    for header in headers:
+        print(f"DEBUG: processing header '{header}'")
+        value = input(f"Enter value for '{header}': ")
+        collected_data[header] = value
+    return collected_data
 
-def update_worksheet(data_input, worksheet):
+def confirm_data(collected_data):
+    print("\nHere are the values you've entered:")
+    for key, value in collected_data:
+        print(f"{key}: {value}")
+    is_correct = input("\nConfirm your data (Y/N): ")
+    if is_correct == "Y":
+        update_worksheet(collected_data, worksheet)
+    elif is_correct == "N":
+        print("Please review your data and enter it again")
+    else:
+        print("Invalid choice. please press Y or N on your keyboard to proceed")
+
+def update_worksheet(collected_data, worksheet):
     print(f"updating {worksheet} worksheet... \n")
     worksheet_to_update = SHEET.worksheet(worksheet)
-    worksheet_to_update.append_row(data_input)
+    worksheet_to_update.append_row(collected_data)
     print(f"{worksheet} worksheet updated successfully\n")
 
 def calculate_surplus_figures(sales_row):
@@ -130,14 +150,15 @@ def run_application():
     displays menu until user chooses option 3.
     """
     fetch_headers()
-    # figures = cheesecake_sold()
-    # update_worksheet(inputs, "sales")
-    # new_surplus_figures = calculate_surplus_figures(sales_figures)
-    # update_worksheet(new_surplus_figures, "surplus")
-    # sales_columns = get_last_5_figures_sales()
-    # stock_figures = calculate_stock_figures(sales_columns)
-    # update_worksheet(stock_figures, "stock")
-    # order_new_stock()
+    handle_dictionary_input('headers')
+    confirm_data('collected_data')
+    #update_worksheet(collected_data, "sales")
+    #new_surplus_figures = calculate_surplus_figures(sales_figures)
+    #update_worksheet(new_surplus_figures, "surplus")
+    #sales_columns = get_last_5_figures_sales()
+    #stock_figures = calculate_stock_figures(sales_columns)
+    #update_worksheet(stock_figures, "stock")
+    #order_new_stock()
 
 def how_to_use():
     """
@@ -164,8 +185,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-    
-
-# main()
