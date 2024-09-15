@@ -51,8 +51,11 @@ def fetch_headers():
     """
     worksheet = SHEET.worksheet('sales')
     headers = worksheet.row_values(1)
-    print("DEBUG: headers fetched:", headers)
-    return headers
+    header_input_dict = {}
+    for header in headers:
+        value = input(f"Please enter the value for '{header}': \n")
+        header_input_dict[header] = value
+    print("DEBUG: headers fetched:", header_input_dict)
     
 def handle_dictionary_input(headers):
     collected_data = []
@@ -150,8 +153,8 @@ def run_application():
     displays menu until user chooses option 3.
     """
     fetch_headers()
-    handle_dictionary_input('headers')
-    confirm_data('collected_data')
+    #handle_dictionary_input('headers')
+    #confirm_data('collected_data')
     #update_worksheet(collected_data, "sales")
     #new_surplus_figures = calculate_surplus_figures(sales_figures)
     #update_worksheet(new_surplus_figures, "surplus")
