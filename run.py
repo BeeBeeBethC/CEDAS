@@ -56,7 +56,8 @@ def fetch_headers():
         headers_fetched[header] = value
     print("DEBUG: headers fetched:", headers_fetched)
     collected_data = headers_fetched.values()
-    print(collected_data)
+    collected_list = list(collected_data)
+    print(collected_list)
     
 def confirm_data(collected_data):
     print("\nHere are the values you've entered:")
