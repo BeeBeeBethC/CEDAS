@@ -59,26 +59,20 @@ def fetch_headers():
     collected_list = list(collected_data)
     print(collected_list)
     
-def confirm_data(collected_data):
-    print("\nHere are the values you've entered:")
-    for key, value in collected_data:
-        print(f"{key}: {value}")
-    is_correct = input("\nConfirm your data (Y/N): ")
-    if is_correct == "Y":
-        convert_to_list()
-    elif is_correct == "N":
-        print("Please review your data and enter it again")
-        fetch_headers()
-    else:
-        print("Invalid choice. please press Y or N on your keyboard to proceed")
-
-def convert_to_list(header_input_dict):
-    print("DEBUG: list from dict:", list(header_input_dict.values()))
-
-def update_worksheet(collected_data, worksheet):
+    #is_correct = input("\nConfirm your data (Y/N): ")
+    #if is_correct == "Y":
+    #    print("this is the data you've provided", collected_list)
+    #elif is_correct == "N":
+    #    print("Please review your data and enter it again")
+    #    fetch_headers()
+    #else:
+    #    print("Invalid choice. please press Y or N on your keyboard to proceed")
+    #return collected_list
+    
+def update_worksheet(collected_list, worksheet):
     print(f"updating {worksheet} worksheet... \n")
     worksheet_to_update = SHEET.worksheet(worksheet)
-    worksheet_to_update.append_row(collected_data)
+    worksheet_to_update.append_row(collected_list)
     print(f"{worksheet} worksheet updated successfully\n")
 
 def calculate_surplus_figures(sales_row):
@@ -151,9 +145,7 @@ def run_application():
     displays menu until user chooses option 3.
     """
     fetch_headers()
-    #extract_values('header_input_dict')
-    #is_data_correct('header_input_dict')
-    #update_worksheet(collected_data, "sales")
+    #update_worksheet(collected_list, "sales")
     #new_surplus_figures = calculate_surplus_figures(sales_figures)
     #update_worksheet(new_surplus_figures, "surplus")
     #sales_columns = get_last_5_figures_sales()
