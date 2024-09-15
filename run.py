@@ -1,7 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime
-from prettytable import PrettyTable
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -51,31 +50,29 @@ def fetch_headers():
     """
     worksheet = SHEET.worksheet('sales')
     headers = worksheet.row_values(1)
-    header_input_dict = {}
+    headers_fetched = {}
     for header in headers:
         value = input(f"Please enter the value for '{header}': \n")
-        header_input_dict[header] = value
-    print("DEBUG: headers fetched:", header_input_dict)
+        headers_fetched[header] = value
+    print("DEBUG: headers fetched:", headers_fetched)
+    collected_data = headers_fetched.values()
+    print(collected_data)
     
-def handle_dictionary_input(headers):
-    collected_data = []
-    for header in headers:
-        print(f"DEBUG: processing header '{header}'")
-        value = input(f"Enter value for '{header}': ")
-        collected_data[header] = value
-    return collected_data
-
 def confirm_data(collected_data):
     print("\nHere are the values you've entered:")
     for key, value in collected_data:
         print(f"{key}: {value}")
     is_correct = input("\nConfirm your data (Y/N): ")
     if is_correct == "Y":
-        update_worksheet(collected_data, worksheet)
+        convert_to_list()
     elif is_correct == "N":
         print("Please review your data and enter it again")
+        fetch_headers()
     else:
         print("Invalid choice. please press Y or N on your keyboard to proceed")
+
+def convert_to_list(header_input_dict):
+    print("DEBUG: list from dict:", list(header_input_dict.values()))
 
 def update_worksheet(collected_data, worksheet):
     print(f"updating {worksheet} worksheet... \n")
@@ -153,8 +150,8 @@ def run_application():
     displays menu until user chooses option 3.
     """
     fetch_headers()
-    #handle_dictionary_input('headers')
-    #confirm_data('collected_data')
+    #extract_values('header_input_dict')
+    #is_data_correct('header_input_dict')
     #update_worksheet(collected_data, "sales")
     #new_surplus_figures = calculate_surplus_figures(sales_figures)
     #update_worksheet(new_surplus_figures, "surplus")
