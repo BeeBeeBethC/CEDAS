@@ -14,7 +14,12 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('CEDAS')
 
-# sales = SHEET.worksheet('sales')
+worksheet = SHEET.get_worksheet(0)
+
+data = worksheet.get_all_values()
+df = pd.DataFrame(data[1:], columns=data[0])
+
+print(df)
 
 # data = sales.get_all_values()
 
@@ -132,7 +137,7 @@ def order_new_stock():
 
     print(to_order)
 
-def run_application():
+#def run_application():
     """
     when option 1 is selected from the menu, it runs all 
     other functions before looping back round and 
