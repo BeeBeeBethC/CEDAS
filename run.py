@@ -1,7 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime
-import pandas as pd
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -14,12 +13,7 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('CEDAS')
 
-worksheet = SHEET.get_worksheet(0)
-
-data = worksheet.get_all_values()
-df = pd.DataFrame(data[1:], columns=data[0])
-
-print(df)
+# sales = SHEET.worksheet('sales')
 
 # data = sales.get_all_values()
 
@@ -137,7 +131,7 @@ def order_new_stock():
 
     print(to_order)
 
-#def run_application():
+def run_application():
     """
     when option 1 is selected from the menu, it runs all 
     other functions before looping back round and 
