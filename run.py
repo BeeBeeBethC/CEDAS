@@ -20,7 +20,7 @@ SHEET = GSPREAD_CLIENT.open('CEDAS')
 # print(data) commented out as working(row 1)
 
 def display_menu():
-    print("Welcome to S-DAS, The Stock-Data Automation System.\n")
+    print("\nWelcome to S-DAS, The Stock-Data Automation System.\n")
     print("Please select: \n")
     print("Press '1' to run the application\n")
     print("Press '2' for Instructions\n")
@@ -28,18 +28,18 @@ def display_menu():
 
 def handle_menu_choice(choice):
     if choice == "1":
-        print("Option 1 selected. Application Running\n")
+        print("\nOption 1 selected. Application Running\n")
         run_application()
     elif choice == "2":
-        print("Option 2 selected. Please wait for instructions to show.\n")
+        print("\nOption 2 selected. Please wait for instructions to show.\n")
         how_to_use()
     elif choice == "3":
-        print("Option 3 selected.\n")
+        print("\nOption 3 selected.\n")
         print("Thank you for Using S-DAS\n")
         print("Exiting program now.")
     else:
-        print("Invalid choice. Please press a Number '1' '2' or '3'.\n")
-        print("Alternatively Press '2' to review Instructions.\n")
+        print("\nInvalid choice. Please press a Number '1' '2' or '3'.\n")
+        print("\nAlternatively Press '2' to review Instructions.\n")
 
 def fetch_headers():
     """
@@ -55,41 +55,23 @@ def fetch_headers():
 def user_input_flavours(headers):
     headers_fetched = {}
     for header in headers:
-        value = input(f"Please enter the value for '{header}': \n")
+        value = input(f"\nPlease enter the value for '{header}': \n")
         headers_fetched[header] = value
     print("DEBUG: headers fetched:", headers_fetched)
     collected_data = headers_fetched.values()
     ui_list = list(collected_data)
     return ui_list
     
-def update_worksheet(ui_list, worksheet):
+def update_worksheet(input_list, worksheet):
     print(f"updating {worksheet} worksheet... \n")
     worksheet_to_update = SHEET.worksheet(worksheet)
-    worksheet_to_update.append_row(ui_list)
+    worksheet_to_update.append_row(input_list)
     print(f"{worksheet} worksheet updated successfully\n")
-
-def calculate_surplus_figures(sales_row):
-    """
-    compare sales figures with stock figures. 
-    the zip method used with a for loop allows us to run through
-    and iterate two lists simultaneously.
-    """
-    print("Calculating Surplus Figures...\n")
-    stock = SHEET.worksheet("stock").get_all_values()
-    stock_row = stock[-1]
-
-    surplus_figures = []
-    for stock, sales in zip(stock_row, sales_row):
-        surplus = int(stock) - sales
-        surplus_figures.append(surplus)
-    
-    return surplus_figures
-
+"""
 def get_last_5_figures_sales():
-    """ 
-    collects columns of figures and collects last 5 entries 
-    for each cheesecake and returns this data as a list of lists
-    """
+    #collects columns of figures and collects last 5 entries 
+    #for each cheesecake and returns this data as a list of lists
+    
     sales = SHEET.worksheet("sales")
     columns = []
     for ind in range(1, 8):
@@ -97,7 +79,7 @@ def get_last_5_figures_sales():
         columns.append(column[-5:])
 
     return columns
-
+"""
 def calculate_stock_figures(figures):
     """
     calculates average stock figures generating dynamic
@@ -114,7 +96,7 @@ def calculate_stock_figures(figures):
 
     return new_stock_figures
 
-def order_new_stock():
+def order_new_stock(new_stock_figures):
     """
     Displays stock to order in the terminal ready for the next day.
     using the enumerate function, it takes the collection of data 
@@ -139,11 +121,10 @@ def run_application():
     """
     headers = fetch_headers()
     input_list = user_input_flavours(headers)
-    update_worksheet(ui_list, "sales")
-    new_surplus_figures = calculate_surplus_figures(ui_list)
-    sales_columns = get_last_5_figures_sales(5)
-    stock_figures = calculate_stock_figures(sales_columns)
-    update_worksheet(stock_figures, "stock")
+    update_worksheet(input_list, "sales")
+    new_stock_figures = calculate_stock_figures(input_list)
+    #sales_columns = get_last_5_figures_sales(5)
+    update_worksheet(new_stock_figures, "stock")
     order_new_stock()
 
 def how_to_use():
