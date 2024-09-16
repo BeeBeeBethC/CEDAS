@@ -41,6 +41,12 @@ def handle_menu_choice(choice):
         print("\nInvalid choice. Please press a Number '1' '2' or '3'.\n")
         print("\nAlternatively Press '2' to review Instructions.\n")
 
+def are_numbers(*args):
+    for arg in args:
+        if not isinstance(arg, (int, float)):
+            raise ValueError(f"Invalid input {arg}: All inputs MUST be numbers.")
+    return args
+
 def fetch_headers():
     """
     retrieves Headers (flavours) from the spreadsheet and displays. 
@@ -59,11 +65,21 @@ def user_input_flavours(headers):
         headers_fetched[header] = value
     print("DEBUG: headers fetched:", headers_fetched)
     collected_data = headers_fetched.values()
-    ui_list = list(collected_data)
-    return ui_list
+    input_list = list(collected_data)
+        
+    try:
+        are_numbers(*map(int, input_list))
+    except ValueError as e:
+        print(e)
+        return None
+
+    return input_list
     
 def update_worksheet(input_list, worksheet):
-    print(f"updating {worksheet} worksheet... \n")
+    if input_list is None:
+        print(f"\n No data to update in {worksheet} worksheet due to invalid input.")
+        return
+    print(f"\nUpdating {worksheet} worksheet... \n")
     worksheet_to_update = SHEET.worksheet(worksheet)
     worksheet_to_update.append_row(input_list)
     print(f"{worksheet} worksheet updated successfully\n")
@@ -122,10 +138,13 @@ def run_application():
     headers = fetch_headers()
     input_list = user_input_flavours(headers)
     update_worksheet(input_list, "sales")
-    new_stock_figures = calculate_stock_figures(input_list)
-    #sales_columns = get_last_5_figures_sales(5)
-    update_worksheet(new_stock_figures, "stock")
-    order_new_stock()
+    if input_list is not None:
+        new_stock_figures = calculate_stock_figures([input_list])
+        #sales_columns = get_last_5_figures_sales(5)
+        update_worksheet(new_stock_figures, "stock")
+        order_new_stock(new_stock_figures)
+    else:
+        print("INVALID INPUT. APPLICATION STOPPED.")
 
 def how_to_use():
     """
