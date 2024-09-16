@@ -1,6 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime
+import pandas as pd
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -50,29 +51,22 @@ def fetch_headers():
     """
     worksheet = SHEET.worksheet('sales')
     headers = worksheet.row_values(1)
+    return headers
+    
+def user_input_flavours(headers):
     headers_fetched = {}
     for header in headers:
         value = input(f"Please enter the value for '{header}': \n")
         headers_fetched[header] = value
     print("DEBUG: headers fetched:", headers_fetched)
     collected_data = headers_fetched.values()
-    collected_list = list(collected_data)
-    print(collected_list)
+    ui_list = list(collected_data)
+    return ui_list
     
-    #is_correct = input("\nConfirm your data (Y/N): ")
-    #if is_correct == "Y":
-    #    print("this is the data you've provided", collected_list)
-    #elif is_correct == "N":
-    #    print("Please review your data and enter it again")
-    #    fetch_headers()
-    #else:
-    #    print("Invalid choice. please press Y or N on your keyboard to proceed")
-    #return collected_list
-    
-def update_worksheet(collected_list, worksheet):
+def update_worksheet(ui_list, worksheet):
     print(f"updating {worksheet} worksheet... \n")
     worksheet_to_update = SHEET.worksheet(worksheet)
-    worksheet_to_update.append_row(collected_list)
+    worksheet_to_update.append_row(ui_list)
     print(f"{worksheet} worksheet updated successfully\n")
 
 def calculate_surplus_figures(sales_row):
@@ -131,12 +125,12 @@ def order_new_stock():
     stock = SHEET.worksheet("stock").get_all_values()
     headers = stock[0]
     last_row = stock[-1]
-    To_order = {}
+    to_order = {}
 
     for i, header in enumerate(headers):
-        To_order[header] = last_row[i]
+        to_order[header] = last_row[i]
 
-    print(To_order)
+    print(to_order)
 
 def run_application():
     """
@@ -144,14 +138,14 @@ def run_application():
     other functions before looping back round and 
     displays menu until user chooses option 3.
     """
-    fetch_headers()
-    #update_worksheet(collected_list, "sales")
-    #new_surplus_figures = calculate_surplus_figures(sales_figures)
-    #update_worksheet(new_surplus_figures, "surplus")
-    #sales_columns = get_last_5_figures_sales()
-    #stock_figures = calculate_stock_figures(sales_columns)
-    #update_worksheet(stock_figures, "stock")
-    #order_new_stock()
+    headers = fetch_headers()
+    input_list = user_input_flavours(headers)
+    update_worksheet(ui_list, "sales")
+    new_surplus_figures = calculate_surplus_figures(ui_list)
+    sales_columns = get_last_5_figures_sales(5)
+    stock_figures = calculate_stock_figures(sales_columns)
+    update_worksheet(stock_figures, "stock")
+    order_new_stock()
 
 def how_to_use():
     """
