@@ -14,28 +14,29 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('CEDAS')
 
-# sales = SHEET.worksheet('sales')
-
-# data = sales.get_all_values()
-
-# print(data) commented out as working(row 1)
-
 def display_menu():
+    #shows what options are available to users
     print("\nWelcome to S-DAS, The Stock-Data Automation System.\n")
-    print("Please select: \n")
+    print("\nPlease select: \n")
     print("Press '1' to run the application\n")
     print("Press '2' for Instructions\n")
     print("Press '3' to Exit\n")
 
 def handle_menu_choice(choice):
+    #handles user choice
     if choice == "1":
-        print("\nOption 1 selected. Application Running\n")
+        print("\nOption 1 selected.\n")
+        print("---------------------------------------------------")
+        print("Application Running\n")
         run_application()
     elif choice == "2":
-        print("\nOption 2 selected. Please wait for instructions to show.\n")
+        print("\nOption 2 selected.\n")
+        print("---------------------------------------------------")
+        print("Please wait for instructions to show.\n")
         how_to_use()
     elif choice == "3":
         print("\nOption 3 selected.\n")
+        print("---------------------------------------------------")
         print("Thank you for Using S-DAS\n")
         print("Exiting program now.")
     else:
@@ -43,17 +44,17 @@ def handle_menu_choice(choice):
         print("\nAlternatively Press '2' to review Instructions.\n")
 
 def fetch_headers():
-    """
-    retrieves Headers (flavours) from the spreadsheet and displays. 
-    for loop now added in to loop over each flavour and requesting 
-    user input for quantity sold and asking users to confirm is 
-    correct. 
-    """
+    #gets headers from the spreadsheet and displays.
     worksheet = SHEET.worksheet('sales')
     headers = worksheet.row_values(1)
     return headers
 
 def user_input_flavours(headers):
+    """
+    while loops added to headers for loop to check for input validation
+    nested while loop added. refuses to move forward until the 
+    correct data value is given.
+    """
     while True:
         headers_fetched = {}
         for header in headers:
@@ -67,19 +68,17 @@ def user_input_flavours(headers):
                 except ValueError:
                     print(f"'{value}' is not a number. try again")
 
-        print("DEBUG: headers fetched:", headers_fetched)
         return list(headers_fetched.values())
 
 def update_worksheet(input_list, worksheet):
+    #updates multiple worksheets
     print(f"\nUpdating {worksheet} worksheet... \n")
     worksheet_to_update = SHEET.worksheet(worksheet)
     worksheet_to_update.append_row(input_list)
     print(f"{worksheet} worksheet updated successfully\n")
 
 def get_last_5_figures_sales():
-    #collects columns of figures and collects last 5 entries 
-    #for each cheesecake and returns this data as a list of lists
-    
+    # Collects columns of figures. Collects last 5 entries. Returns data as a list of lists.
     sales = SHEET.worksheet("sales")
     columns = []
     for ind in range(1, 8):
@@ -89,10 +88,7 @@ def get_last_5_figures_sales():
     return columns
 
 def calculate_stock_figures(input_lists):
-    """
-    calculates average stock figures generating dynamic
-    stock order recommendations
-    """
+    # Calculates average figures, provides stock recommendations.
     print("Calculating Stock Figures Please Wait...\n")
     new_stock_figures = []
     
@@ -109,11 +105,7 @@ def calculate_stock_figures(input_lists):
     return new_stock_figures
 
 def order_new_stock(new_stock_figures):
-    """
-    Displays stock to order in the terminal ready for the next day.
-    using the enumerate function, it takes the collection of data 
-    and returns it in a paired list for example {'Lemon': '7'}
-    """
+    # Retrieves data and displays stock to order in a table.
     print("Retrieving stock to order...\n")
     stock = SHEET.worksheet("stock").get_all_values()
     headers = stock[0]
@@ -130,15 +122,11 @@ def order_new_stock(new_stock_figures):
     table.field_names = ["Item", "Stock to Order"]
     for item, stock in to_order.items():
         table.add_row([item, stock])
-        
+
     print(table)
 
 def run_application():
-    """
-    when option 1 is selected from the menu, it runs all 
-    other functions before looping back round and 
-    displays menu until user chooses option 3.
-    """
+    # Option 1 selected, runs all other functions, loops and displays menu until option 3 selected.
     headers = fetch_headers()
     input_list = user_input_flavours(headers)
     update_worksheet(input_list, "sales")
@@ -148,24 +136,23 @@ def run_application():
     order_new_stock(new_stock_figures)
 
 def how_to_use():
-    """
-    Instructions on how to use S-DAS
-    add to as functions multiply!
-    """
-    print("Select function from menu options using numbers 1-3, press Enter.\n")
-    print("Option 1, Type in sales figures to corresponding cheesecake flavours, press Enter\n")
+    # Instructions, how to use S-DAS
+    print("---------------------------------------------------")
+    print("\nSelect function from menu options using numbers 1-3, press Enter.\n")
+    print("---------------------------------------------------")
+    print("\nOption 1, Type in sales figures to corresponding cheesecake flavours, press Enter\n")
     print("Allow the programme run all the functions shown in the terminal it will return you to the main menu once complete.\n")
-    print("Option 2, Takes you to instructions on how to use S-DAS (You are currently here.)\n")
-    print("Option 3, Exits the program\n")
+    print("---------------------------------------------------")
+    print("\nOption 2, Takes you to instructions on how to use S-DAS (You are currently here.)\n")
+    print("---------------------------------------------------")
+    print("\nOption 3, Exits the program\n")
+    print("---------------------------------------------------")
 
 def main():
-    """
-    Runs an indefinite loop displaying and handling the users choice
-    breaks out of loop if user selects option '3'
-    """
+    # Runs indefinite loop, handles choice, breaks if option 3 selected.
     while True:
         display_menu()
-        choice = input("Select your Option: \n")
+        choice = input("\nSelect your Option: \n")
         handle_menu_choice(choice)
         if choice == "3":
             break
