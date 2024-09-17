@@ -51,10 +51,7 @@ def fetch_headers():
     worksheet = SHEET.worksheet('sales')
     headers = worksheet.row_values(1)
     return headers
-    """ 
-    NEED TO REVIEW THIS AS JUST GOES INTO AN INFINITE LOOP. 
-    REWORK PLEASE.
-    """
+
 def user_input_flavours(headers):
     while True:
         headers_fetched = {}
@@ -70,19 +67,14 @@ def user_input_flavours(headers):
                     print(f"'{value}' is not a number. try again")
 
         print("DEBUG: headers fetched:", headers_fetched)
-        collected_data = headers_fetched.values()
-        input_list = list(collected_data)
-        break
+        return list(headers_fetched.values())
 
 def update_worksheet(input_list, worksheet):
-    if input_list is None:
-        print(f"\n No data to update in {worksheet} worksheet due to invalid input.")
-        return
     print(f"\nUpdating {worksheet} worksheet... \n")
     worksheet_to_update = SHEET.worksheet(worksheet)
     worksheet_to_update.append_row(input_list)
     print(f"{worksheet} worksheet updated successfully\n")
-"""
+
 def get_last_5_figures_sales():
     #collects columns of figures and collects last 5 entries 
     #for each cheesecake and returns this data as a list of lists
@@ -94,8 +86,8 @@ def get_last_5_figures_sales():
         columns.append(column[-5:])
 
     return columns
-"""
-def calculate_stock_figures(figures):
+
+def calculate_stock_figures(input_lists):
     """
     calculates average stock figures generating dynamic
     stock order recommendations
@@ -103,11 +95,15 @@ def calculate_stock_figures(figures):
     print("Calculating Stock Figures Please Wait...\n")
     new_stock_figures = []
     
-    for column in figures:
-        int_column = [int(num) for num in column]
-        average = sum(int_column) / len(int_column)
-        stock_num = average * 1.1
-        new_stock_figures.append(round(stock_num))
+    for column in input_lists:
+        int_column = [int(num) for num in column if isinstance(num, str) and num.isdigit()]
+        
+        if int_column:
+            average = sum(int_column) / len(int_column)
+            stock_num = average * 1.1
+            new_stock_figures.append(round(stock_num))
+        else:
+            new_stock_figures.append(0)
 
     return new_stock_figures
 
@@ -120,13 +116,15 @@ def order_new_stock(new_stock_figures):
     print("Retrieving stock to order...\n")
     stock = SHEET.worksheet("stock").get_all_values()
     headers = stock[0]
-    last_row = stock[-1]
     to_order = {}
 
     for i, header in enumerate(headers):
-        to_order[header] = last_row[i]
+        if i < len(new_stock_figures):
+            to_order[header] = new_stock_figures[i]
+        else:
+            to_order[header] = 0
 
-    print(to_order)
+    print("Stock to order:", to_order)
 
 def run_application():
     """
@@ -137,8 +135,8 @@ def run_application():
     headers = fetch_headers()
     input_list = user_input_flavours(headers)
     update_worksheet(input_list, "sales")
-    new_stock_figures = calculate_stock_figures([input_list])
-    #sales_columns = get_last_5_figures_sales(5)
+    sales_columns = get_last_5_figures_sales()
+    new_stock_figures = calculate_stock_figures(sales_columns)
     update_worksheet(new_stock_figures, "stock")
     order_new_stock(new_stock_figures)
 
@@ -152,8 +150,6 @@ def how_to_use():
     print("Allow the programme run all the functions shown in the terminal it will return you to the main menu once complete.\n")
     print("Option 2, Takes you to instructions on how to use S-DAS (You are currently here.)\n")
     print("Option 3, Exits the program\n")
-
-# IF TIME ADD IN GET X SALES FIGURES()
 
 def main():
     """
