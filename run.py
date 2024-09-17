@@ -1,6 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime
+from prettytable import PrettyTable
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -124,7 +125,13 @@ def order_new_stock(new_stock_figures):
         else:
             to_order[header] = 0
 
-    print("Stock to order:", to_order)
+    print("Stock to order:")
+    table = PrettyTable()
+    table.field_names = ["Item", "Stock to Order"]
+    for item, stock in to_order.items():
+        table.add_row([item, stock])
+        
+    print(table)
 
 def run_application():
     """
