@@ -41,12 +41,6 @@ def handle_menu_choice(choice):
         print("\nInvalid choice. Please press a Number '1' '2' or '3'.\n")
         print("\nAlternatively Press '2' to review Instructions.\n")
 
-def are_numbers(*args):
-    for arg in args:
-        if not isinstance(arg, (int, float)):
-            raise ValueError(f"Invalid input {arg}: All inputs MUST be numbers.")
-    return args
-
 def fetch_headers():
     """
     retrieves Headers (flavours) from the spreadsheet and displays. 
@@ -65,18 +59,20 @@ def user_input_flavours(headers):
     while True:
         headers_fetched = {}
         for header in headers:
-            value = input(f"\nPlease enter the value for '{header}': \n")
-            headers_fetched[header] = value
+            while True:
+                value = input(f"\nPlease enter the value for '{header}': \n")
+                try:
+                    value = int(value)
+                    print("valid")
+                    headers_fetched[header] = value
+                    break
+                except ValueError:
+                    print(f"'{value}' is not a number. try again")
+
         print("DEBUG: headers fetched:", headers_fetched)
         collected_data = headers_fetched.values()
         input_list = list(collected_data)
-        
-        try:
-            are_numbers(*map(int, input_list))
-            return input_list
-        except ValueError as e:
-            print(e)
-            print("One or more values were not valid numbers. Please try again")
+        break
 
 def update_worksheet(input_list, worksheet):
     if input_list is None:
@@ -156,6 +152,8 @@ def how_to_use():
     print("Allow the programme run all the functions shown in the terminal it will return you to the main menu once complete.\n")
     print("Option 2, Takes you to instructions on how to use S-DAS (You are currently here.)\n")
     print("Option 3, Exits the program\n")
+
+# IF TIME ADD IN GET X SALES FIGURES()
 
 def main():
     """

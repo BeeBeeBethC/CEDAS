@@ -46,7 +46,7 @@ The aim of CEDAS is to provide an automated program that will assist in monitori
 
 Welcome to CEDAS. please follow the steps below to use the system correctly.
 
-(COMPLETE STEPS!)
+(COMPLETE STEPS FROM OPTION 2 OF INSTRUCTIONS. NEED TO UPDATE BOTH!!)
 
 ## Existing Features
 
@@ -55,6 +55,8 @@ Before implementing the dynamic system that CEDAS offers, the owners of Cheeseca
 ## Future Implementations
 
 ## Data Models
+
+INSERT SCREENSHOT OF FLOW CHART CREATED USING CANVA
 
 ## Testing
 ### bugs
@@ -65,10 +67,12 @@ Infinite while loop
 This was human error as I'd accidentally put my programme into an infinte while loop requesting data due to no 'if' statement even though data had been input. I also forgot to comment out prior code for testing if the API was successfully connected which could have been a contributing factor.
 
 Unable to update sales worksheet
-This was due to human error not providing correct commands therefore the programme wopuld not run or update and kept throwing an error back(see screenshot) in and not updating the corresponding sheet.
+This was due to human error not providing correct commands therefore the programme would not run or update and kept throwing an error back(see screenshot) in and not updating the corresponding sheet.
 
 unable to return stock averages
 due to an undefined variable it kept throwing back an error.
+
+INSERT screenshots
 
 ### solved bugs
 
@@ -140,7 +144,7 @@ WRITE OUT HEROKU DEPLOYMENT
 
 5. navigate to your heroku dashboard. 
 
-6. from the heroku dashboard, create a new app and name it. each app name needs to be unique or it wont accept it.
+6. from the heroku dashboard, create a new app and name it. each app name needs to be unique or it won't accept it.
 
 7. select region. 
 
@@ -156,7 +160,14 @@ NOTE: If these two packages are the opposite way round you can click and drag th
 
 11. For this project there is the choice of automatic deployment or manual. For CEDAS I have chosen to manually deploy it which means that it won't automatically update from pushed changes but it does show deployment logs. 
 
-12. To update the project once deployment has complete, navigate to FINISH THIS OFF! 
+12. to manually update the project using the main branch
+    1.  firstly make sure your most recent changes have been pushed to github and confirm these before moving onto the next step.
+    2.  navigate back to project overview and select the deploy option from the navigation menu at the top of the page.
+    3.  scroll down the deploy page until you reach manual deploy. 
+    4.  choose branch to deploy, make sure it's the main branch. 
+    5.  click the deploy button. (follow steps 13 onwards)
+
+INSERT screenshot
 
 13. Once the project has been deployed you should recieve a message stating that "project was successfully deployed" and you should be able to click a link that takes you to the application terminal where you can run your code in Heroku. 
 
