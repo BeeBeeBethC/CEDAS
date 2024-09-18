@@ -17,11 +17,12 @@ SHEET = GSPREAD_CLIENT.open('CEDAS')
 
 def display_menu():
     # shows what options are available to users
-    print("\nWelcome to S-DAS, The Stock-Data Automation System.\n")
+    print("\nWelcome to CEDAS")
+    print("The Cheesecake Emporium Data Automation System.")
     print("\nPlease select: \n")
     print("Press '1' to run the application\n")
     print("Press '2' for Instructions\n")
-    print("Press '3' to get data using a specific date.\n")
+    print("Press '3' to display data from a specific date.\n")
     print("Press '4' to Exit.\n")
 
 
@@ -43,7 +44,7 @@ def handle_menu_choice(choice):
     elif choice == "4":
         print("Option 4 selected.")
         print("---------------------------------------------------")
-        print("Thank you for Using S-DAS\n")
+        print("Thank you for Using CEDAS\n")
         print("Exiting program now.")
     else:
         print("\nInvalid choice. Please press a Number '1' '2' '3' or '4'.\n")
@@ -89,7 +90,7 @@ def fetch_data_from_user_input():
 
 
 def fetch_headers():
-    # gets headers from the spreadsheet and displays.
+    # Retrieves headers from the spreadsheet.
     worksheet = SHEET.worksheet('sales')
     headers = worksheet.row_values(1)
     return headers
@@ -105,6 +106,7 @@ def user_input_flavours(headers):
         headers_fetched = {}
         for header in headers:
             while True:
+                # ----- try, except statement from W3Schools -----
                 try:
                     value = input(f"\nPlease enter a value between 0 and 20:\
                                    for '{header}'  \n")
@@ -119,7 +121,10 @@ def user_input_flavours(headers):
                     print(f"'{value}' is not valid. Please try again.")
         return list(headers_fetched.values())
 
-
+"""
+some functions below are inspired by the love sandwiches walkthrough
+unless otherwise stated within the following code. 
+"""
 def update_worksheet(input_list, worksheet):
     # updates multiple worksheets
     print(f"\nUpdating {worksheet} worksheet... \n")
@@ -140,7 +145,11 @@ def get_last_5_figures_sales():
 
 
 def calculate_stock_figures(input_lists):
-    # Calculates average figures, provides stock recommendations.
+    """
+    Calculates average figures, provides stock recommendations.
+    isinstance reviewed from W3Schools
+    use of Replit for debug see "TESTING.md" for more information.
+    """ 
     print("Calculating Stock Figures Please Wait...\n")
     new_stock_figures = []
     for column in input_lists:
@@ -157,7 +166,12 @@ def calculate_stock_figures(input_lists):
 
 
 def order_new_stock(new_stock_figures):
-    # Retrieves data and displays stock to order in a table.
+    """
+    Retrieves data and displays stock to order in a table.
+    table from PrettyTable. 
+    knowledge gained from PrettyTable official documentation.
+    """
+    
     print("Retrieving stock to order...\n")
     stock = SHEET.worksheet("stock").get_all_values()
     headers = stock[0]
@@ -178,7 +192,15 @@ def order_new_stock(new_stock_figures):
 
 
 def run_application():
-    # Runs all functions, loops and displays menu until option 4 selected.
+    """
+    function layout taken from Love Sandwiches.
+    (main function call in Love Sandwiches)
+    function changed to ensure smooth application
+    running from developing the main menu
+    display function.
+    Runs all functions, loops and displays 
+    menu until option 4 selected.
+    """
     # add_date_to_data()
     headers = fetch_headers()
     input_list = user_input_flavours(headers)
@@ -192,23 +214,26 @@ def run_application():
 def how_to_use():
     # Instructions, how to use S-DAS
     print("---------------------------------------------------")
-    print("\nSelect function from menu options using numbers 1-3")
+    print("\nSelect function from menu options using numbers 1-4")
     print("Press Enter.")
     print("---------------------------------------------------")
-    print("\nOption 1, Type in sales figures to corresponding\
-          cheesecake flavours, press Enter")
-    print("Allow the programme run all the functions shown in the terminal\
-          it will return you to the main menu once complete.")
+    print("\nOption 1, Type in latest sales figures")
+    print("CEDAS asks for values correspoding to cheesecake flavours")
+    print("Allow the application to run until the menu options show")
     print("---------------------------------------------------")
-    print("Option 2, Takes you to instructions on how to use S-DAS\
-          (You are currently here.)")
+    print("Option 2, Takes you to instructions on how to use CEDAS")
     print("---------------------------------------------------")
-    print("\nOption 3, Exits the program")
+    print("\nOption 3, Users can fetch data from a set date.")
+    print("NOTE: CEDAS returns values for after 01-09-2024 only")
+    print("Enter a date from 01-01-2024 in format YYYY-MM_DD")
+          
     print("---------------------------------------------------")
+    print("Option 4 Exits the programme.")
+    print("NOTE: CEDAS asks for values until option 4 is selected")
 
 
 def main():
-    # Runs indefinite loop, handles choice, breaks if option 3 selected.
+    # Runs infinite loop, handles choice, breaks loop if option 4 selected.
     while True:
         display_menu()
         choice = input("\nSelect your Option: \n")
