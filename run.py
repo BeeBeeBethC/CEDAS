@@ -14,8 +14,9 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('CEDAS')
 
+
 def display_menu():
-    #shows what options are available to users
+    # shows what options are available to users
     print("\nWelcome to S-DAS, The Stock-Data Automation System.\n")
     print("\nPlease select: \n")
     print("Press '1' to run the application\n")
@@ -23,30 +24,31 @@ def display_menu():
     print("Press '3' to get data using a specific date.\n")
     print("Press '4' to Exit.\n")
 
+
 def handle_menu_choice(choice):
-    #handles user choice
+    # handles user choice
     if choice == "1":
-        print("\nOption 1 selected.\n")
+        print("\nOption 1 selected.")
         print("---------------------------------------------------")
-        print("Application Running\n")
+        print("Application Running")
         run_application()
     elif choice == "2":
-        print("\nOption 2 selected.\n")
+        print("Option 2 selected.")
         print("---------------------------------------------------")
-        print("Please wait for instructions to show.\n")
+        print("Please wait for instructions to show.")
         how_to_use()
     elif choice == "3":
-        print("\nOption 3 selected.\n")
+        print("Option 3 selected.")
         print("---------------------------------------------------")
-        #fetch_data_from_user_input()
-    elif choice =="4":
-        print("\nOption 4 selected.\n")
+    elif choice == "4":
+        print("Option 4 selected.")
         print("---------------------------------------------------")
         print("Thank you for Using S-DAS\n")
         print("Exiting program now.")
     else:
         print("\nInvalid choice. Please press a Number '1' '2' '3' or '4'.\n")
         print("\nAlternatively Press '2' to review Instructions.\n")
+
 
 def add_date_to_data():
     start_date = datetime.date(2024, 9, 1)
@@ -56,19 +58,22 @@ def add_date_to_data():
     updated_data = [date_header + data[0]]
     current_date = start_date
     for row in data[1:]:
-        updated_row = [current_date] + data[row_index]
+        updated_row = [current_date] + data[row]
         updated_data.append(updated_row)
         current_date += datetime.timedelta(days=1)
     sales.clear()
     sales.update("A1", updated_data)
     print("DEBUG: Date successfully added to column 1!")
 
+
 def fetch_data_from_date(date_str):
     target_date = datetime.strptime(date_str, "%Y-%m-%d")
     sales_data = SHEET.worksheet("sales").get_all_values()
-    filtered_data = [data for data in sales_data if datetime.strptime(data['date'],"%Y-%m-%d") >= target_date]
-    
+    filtered_data = [data for data in sales_data
+                     if datetime.strptime(data['date'],
+                                          "%Y-%m-%d") >= target_date]
     return filtered_data
+
 
 def fetch_data_from_user_input():
     while True:
@@ -79,44 +84,52 @@ def fetch_data_from_user_input():
             print(filtered_data)
             break
         except ValueError:
-            print("Invalid date. please write as YYYY-MM-DD. please try again. \n")
+            print("Invalid date. please write as YYYY-MM-DD.")
+            print("Please try again. \n")
+
 
 def fetch_headers():
-    #gets headers from the spreadsheet and displays.
+    # gets headers from the spreadsheet and displays.
     worksheet = SHEET.worksheet('sales')
     headers = worksheet.row_values(1)
     return headers
 
+
 def user_input_flavours(headers):
     """
     while loops added to headers for loop to check for input validation
-    nested while loop added. refuses to move forward until the 
+    nested while loop added. refuses to move forward until the
     correct data value is given.
     """
     while True:
         headers_fetched = {}
         for header in headers:
             while True:
-                value = input(f"\nPlease enter the value for '{header}': \n")
                 try:
+                    value = input(f"\nPlease enter a value between 0 and 20:\
+                                   for '{header}'  \n")
                     value = int(value)
-                    print("valid")
-                    headers_fetched[header] = value
-                    break
+                    if 0 <= value <= 99:
+                        print("Value valid. Proceed.")
+                        headers_fetched[header] = value
+                        break
+                    else:
+                        print("Invalid input, Enter a number between 0 and 20")
                 except ValueError:
-                    print(f"'{value}' is not a number. try again")
-
+                    print(f"'{value}' is not valid. Please try again.")
         return list(headers_fetched.values())
 
+
 def update_worksheet(input_list, worksheet):
-    #updates multiple worksheets
+    # updates multiple worksheets
     print(f"\nUpdating {worksheet} worksheet... \n")
     worksheet_to_update = SHEET.worksheet(worksheet)
     worksheet_to_update.append_row(input_list)
     print(f"{worksheet} worksheet updated successfully\n")
 
+
 def get_last_5_figures_sales():
-    # Collects columns of figures. Collects last 5 entries. Returns data as a list of lists.
+    # Collects columns of figures and last 5 entries. Returns a list of lists.
     sales = SHEET.worksheet("sales")
     columns = []
     for ind in range(1, 8):
@@ -125,14 +138,14 @@ def get_last_5_figures_sales():
 
     return columns
 
+
 def calculate_stock_figures(input_lists):
     # Calculates average figures, provides stock recommendations.
     print("Calculating Stock Figures Please Wait...\n")
     new_stock_figures = []
-    
     for column in input_lists:
-        int_column = [int(num) for num in column if isinstance(num, str) and num.isdigit()]
-        
+        int_column = [int(num) for num in column
+                      if isinstance(num, str) and num.isdigit()]
         if int_column:
             average = sum(int_column) / len(int_column)
             stock_num = average * 1.1
@@ -141,6 +154,7 @@ def calculate_stock_figures(input_lists):
             new_stock_figures.append(0)
 
     return new_stock_figures
+
 
 def order_new_stock(new_stock_figures):
     # Retrieves data and displays stock to order in a table.
@@ -154,7 +168,6 @@ def order_new_stock(new_stock_figures):
             to_order[header] = new_stock_figures[i]
         else:
             to_order[header] = 0
-
     print("Stock to order:")
     table = PrettyTable()
     table.field_names = ["Item", "Stock to Order"]
@@ -163,9 +176,10 @@ def order_new_stock(new_stock_figures):
 
     print(table)
 
+
 def run_application():
-    # Option 1 selected, runs all other functions, loops and displays menu until option 3 selected.
-    #add_date_to_data()
+    # Runs all functions, loops and displays menu until option 4 selected.
+    # add_date_to_data()
     headers = fetch_headers()
     input_list = user_input_flavours(headers)
     update_worksheet(input_list, "sales")
@@ -174,18 +188,24 @@ def run_application():
     update_worksheet(new_stock_figures, "stock")
     order_new_stock(new_stock_figures)
 
+
 def how_to_use():
     # Instructions, how to use S-DAS
     print("---------------------------------------------------")
-    print("\nSelect function from menu options using numbers 1-3, press Enter.\n")
+    print("\nSelect function from menu options using numbers 1-3")
+    print("Press Enter.")
     print("---------------------------------------------------")
-    print("\nOption 1, Type in sales figures to corresponding cheesecake flavours, press Enter\n")
-    print("Allow the programme run all the functions shown in the terminal it will return you to the main menu once complete.\n")
+    print("\nOption 1, Type in sales figures to corresponding\
+          cheesecake flavours, press Enter")
+    print("Allow the programme run all the functions shown in the terminal\
+          it will return you to the main menu once complete.")
     print("---------------------------------------------------")
-    print("\nOption 2, Takes you to instructions on how to use S-DAS (You are currently here.)\n")
+    print("Option 2, Takes you to instructions on how to use S-DAS\
+          (You are currently here.)")
     print("---------------------------------------------------")
-    print("\nOption 3, Exits the program\n")
+    print("\nOption 3, Exits the program")
     print("---------------------------------------------------")
+
 
 def main():
     # Runs indefinite loop, handles choice, breaks if option 3 selected.
@@ -195,6 +215,7 @@ def main():
         handle_menu_choice(choice)
         if choice == "4":
             break
+
 
 if __name__ == "__main__":
     main()
