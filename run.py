@@ -1,6 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
-from datetime import datetime
+from datetime import date, timedelta, datetime
 from prettytable import PrettyTable
 
 SCOPE = [
@@ -41,6 +41,7 @@ def handle_menu_choice(choice):
     elif choice == "3":
         print("Option 3 selected.")
         print("---------------------------------------------------")
+        fetch_data_from_user_input()
     elif choice == "4":
         print("Option 4 selected.")
         print("---------------------------------------------------")
@@ -52,27 +53,45 @@ def handle_menu_choice(choice):
 
 
 def add_date_to_data():
-    start_date = datetime.date(2024, 9, 1)
-    print(f"DEBUG: ", (start_date))
-    data = SHEET.worksheet("sales").get_all_values()
+    start_date = datetime(2024, 8, 1)
+    sales = SHEET.worksheet("sales")
+    data = sales.get_values('B1:H')
+    print("DEBUG: DATA FROM B1 ONWARDS BEFORE CLEARING:")
+    for row in data:
+        print(row)
+
+    sales.clear()
+
+    cleared_data = sales.get_all_values()
+    print("DEBUG: DATA JUST AFTER CLEARING:")
+    print(cleared_data)
+
+
     date_header = ["Date"]
     updated_data = [date_header + data[0]]
     current_date = start_date
     for row in data[1:]:
-        updated_row = [current_date] + data[row]
+        updated_row = [current_date.strftime("%Y-%m-%d")] + row
         updated_data.append(updated_row)
-        current_date += datetime.timedelta(days=1)
-    sales.clear()
-    sales.update("A1", updated_data)
+        current_date += timedelta(days=1)
+
+    print("DEBUG: Updated data")
+    for row in updated_data:
+        print(row)
+    
+
+    sales.update(range_name="A1", values=updated_data)
     print("DEBUG: Date successfully added to column 1!")
 
 
 def fetch_data_from_date(date_str):
     target_date = datetime.strptime(date_str, "%Y-%m-%d")
     sales_data = SHEET.worksheet("sales").get_all_values()
-    filtered_data = [data for data in sales_data
-                     if datetime.strptime(data['date'],
-                                          "%Y-%m-%d") >= target_date]
+    filtered_data = [sales_data[0]]
+    for row in sales_data[1:]:
+        row_date = datetime.strptime(row[0], "%Y-%m-%d")
+        if row_date >= target_date:
+            filtered_data.append(row)
     return filtered_data
 
 
@@ -82,7 +101,11 @@ def fetch_data_from_user_input():
         try:
             datetime.strptime(date_str, "%Y-%m-%d")
             filtered_data = fetch_data_from_date(date_str)
-            print(filtered_data)
+            table = PrettyTable()
+            table.field_names = filtered_data[0]
+            for row in filtered_data[1:]:
+                table.add_row(row)
+                print(table)
             break
         except ValueError:
             print("Invalid date. please write as YYYY-MM-DD.")
@@ -201,14 +224,14 @@ def run_application():
     Runs all functions, loops and displays 
     menu until option 4 selected.
     """
-    # add_date_to_data()
-    headers = fetch_headers()
-    input_list = user_input_flavours(headers)
-    update_worksheet(input_list, "sales")
-    sales_columns = get_last_5_figures_sales()
-    new_stock_figures = calculate_stock_figures(sales_columns)
-    update_worksheet(new_stock_figures, "stock")
-    order_new_stock(new_stock_figures)
+    add_date_to_data()
+    # headers = fetch_headers()
+    # input_list = user_input_flavours(headers)
+    # update_worksheet(input_list, "sales")
+    # sales_columns = get_last_5_figures_sales()
+    # new_stock_figures = calculate_stock_figures(sales_columns)
+    # update_worksheet(new_stock_figures, "stock")
+    # order_new_stock(new_stock_figures)
 
 
 def how_to_use():
