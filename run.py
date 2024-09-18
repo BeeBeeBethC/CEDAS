@@ -20,7 +20,8 @@ def display_menu():
     print("\nPlease select: \n")
     print("Press '1' to run the application\n")
     print("Press '2' for Instructions\n")
-    print("Press '3' to Exit\n")
+    print("Press '3' to get data using a specific date.\n")
+    print("Press '4' to Exit.\n")
 
 def handle_menu_choice(choice):
     #handles user choice
@@ -37,11 +38,48 @@ def handle_menu_choice(choice):
     elif choice == "3":
         print("\nOption 3 selected.\n")
         print("---------------------------------------------------")
+        #fetch_data_from_user_input()
+    elif choice =="4":
+        print("\nOption 4 selected.\n")
+        print("---------------------------------------------------")
         print("Thank you for Using S-DAS\n")
         print("Exiting program now.")
     else:
-        print("\nInvalid choice. Please press a Number '1' '2' or '3'.\n")
+        print("\nInvalid choice. Please press a Number '1' '2' '3' or '4'.\n")
         print("\nAlternatively Press '2' to review Instructions.\n")
+
+def add_date_to_data():
+    start_date = datetime.date(2024, 9, 1)
+    print(f"DEBUG: ", (start_date))
+    data = SHEET.worksheet("sales").get_all_values()
+    date_header = ["Date"]
+    updated_data = [date_header + data[0]]
+    current_date = start_date
+    for row in data[1:]:
+        updated_row = [current_date] + data[row_index]
+        updated_data.append(updated_row)
+        current_date += datetime.timedelta(days=1)
+    sales.clear()
+    sales.update("A1", updated_data)
+    print("DEBUG: Date successfully added to column 1!")
+
+def fetch_data_from_date(date_str):
+    target_date = datetime.strptime(date_str, "%Y-%m-%d")
+    sales_data = SHEET.worksheet("sales").get_all_values()
+    filtered_data = [data for data in sales_data if datetime.strptime(data['date'],"%Y-%m-%d") >= target_date]
+    
+    return filtered_data
+
+def fetch_data_from_user_input():
+    while True:
+        date_str = input("Please enter the date (YYYY-MM-DD): \n")
+        try:
+            datetime.strptime(date_str, "%Y-%m-%d")
+            filtered_data = fetch_data_from_date(date_str)
+            print(filtered_data)
+            break
+        except ValueError:
+            print("Invalid date. please write as YYYY-MM-DD. please try again. \n")
 
 def fetch_headers():
     #gets headers from the spreadsheet and displays.
@@ -127,6 +165,7 @@ def order_new_stock(new_stock_figures):
 
 def run_application():
     # Option 1 selected, runs all other functions, loops and displays menu until option 3 selected.
+    #add_date_to_data()
     headers = fetch_headers()
     input_list = user_input_flavours(headers)
     update_worksheet(input_list, "sales")
@@ -154,7 +193,7 @@ def main():
         display_menu()
         choice = input("\nSelect your Option: \n")
         handle_menu_choice(choice)
-        if choice == "3":
+        if choice == "4":
             break
 
 if __name__ == "__main__":
