@@ -23,8 +23,8 @@ def display_menu():
     print("Press '1' to run the application\n")
     print("Press '2' for Instructions\n")
     print("Press '3' display data from a specific date.")
-    print("(Pressing '3' also provides all data in a table if date\
-           entered is before 2024-08-01)\n")
+    print("(Pressing '3' also provides all data in a table if date entered is \
+           before 2024-08-01)\n")
     print("Press '4' to fetch stock data.\n")
     print("Press '5' to Exit.\n")
 
@@ -145,15 +145,15 @@ def user_input_flavours(headers):
             while True:
                 # ----- try, except statement from W3Schools -----
                 try:
-                    value = input(f"\nPlease enter a value between 0 and 20:\
-                                   for '{header}'  \n")
+                    value = input(f"\nPlease enter a value between 0-20 for:\
+                        '{header}'\n")
                     value = int(value)
                     if 0 <= value <= 20:
                         print("Value valid. Proceed.")
                         headers_fetched[header] = value
                         break
                     else:
-                        print("Invalid input, Enter a number between 0 and 20")
+                        print("Invalid input, Enter a number between 0-20.")
                 except ValueError:
                     print(f"'{value}' is not valid. Please try again.")
         return list(headers_fetched.values())
