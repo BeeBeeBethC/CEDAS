@@ -52,36 +52,35 @@ def handle_menu_choice(choice):
         print("\nAlternatively Press '2' to review Instructions.\n")
 
 
-def add_date_to_data():
-    start_date = datetime(2024, 8, 1)
+def add_date_to_data(headers):
+    default_start_date = datetime(2024, 8, 1)
     sales = SHEET.worksheet("sales")
-    data = sales.get_values('B1:H')
-    print("DEBUG: DATA FROM B1 ONWARDS BEFORE CLEARING:")
-    for row in data:
-        print(row)
-
-    sales.clear()
-
-    cleared_data = sales.get_all_values()
-    print("DEBUG: DATA JUST AFTER CLEARING:")
-    print(cleared_data)
-
-
-    date_header = ["Date"]
-    updated_data = [date_header + data[0]]
-    current_date = start_date
-    for row in data[1:]:
-        updated_row = [current_date.strftime("%Y-%m-%d")] + row
-        updated_data.append(updated_row)
-        current_date += timedelta(days=1)
-
-    print("DEBUG: Updated data")
-    for row in updated_data:
-        print(row)
+    data = sales.get_all_values()
     
+    last_date_str = None
+    for row in reversed(data):
+        if row[0]:
+            try:
+                last_date = datetime.strptime(row[0], "%Y-%m-%d")
+                last_date_str = row[0]
+                break
+            except ValueError:
+                print(f"Skipping invalid date format: {row[0]}")
+                continue
 
-    sales.update(range_name="A1", values=updated_data)
-    print("DEBUG: Date successfully added to column 1!")
+    if last_date_str:
+        last_date = datetime.strptime(last_date_str, "%Y-%m-%d")
+        next_date = last_date + timedelta(days=1)
+    else:
+        next_date = default_start_date
+    print("DEBUG: LAST DATE:", last_date_str)
+    print("DEBUG: NEXT DATE TO BE ADDED:", next_date.strftime("%Y-%m-%d"))
+    
+    user_values = user_input_flavours(headers)
+    new_row = [next_date.strftime("%Y-%m-%d")] + user_values
+    print("DEBUG: NEW ROW TO BE ADDED:", new_row)
+
+    return new_row
 
 
 def fetch_data_from_date(date_str):
@@ -105,7 +104,7 @@ def fetch_data_from_user_input():
             table.field_names = filtered_data[0]
             for row in filtered_data[1:]:
                 table.add_row(row)
-                print(table)
+            print(table)
             break
         except ValueError:
             print("Invalid date. please write as YYYY-MM-DD.")
@@ -115,7 +114,8 @@ def fetch_data_from_user_input():
 def fetch_headers():
     # Retrieves headers from the spreadsheet.
     worksheet = SHEET.worksheet('sales')
-    headers = worksheet.row_values(1)
+    headers = worksheet.row_values(1)[1:]
+    print("DEBUG: Headers Fetched:", headers)
     return headers
 
 
@@ -134,7 +134,7 @@ def user_input_flavours(headers):
                     value = input(f"\nPlease enter a value between 0 and 20:\
                                    for '{header}'  \n")
                     value = int(value)
-                    if 0 <= value <= 99:
+                    if 0 <= value <= 20:
                         print("Value valid. Proceed.")
                         headers_fetched[header] = value
                         break
@@ -148,11 +148,11 @@ def user_input_flavours(headers):
 some functions below are inspired by the love sandwiches walkthrough
 unless otherwise stated within the following code. 
 """
-def update_worksheet(input_list, worksheet):
+def update_worksheet(new_row, worksheet):
     # updates multiple worksheets
     print(f"\nUpdating {worksheet} worksheet... \n")
     worksheet_to_update = SHEET.worksheet(worksheet)
-    worksheet_to_update.append_row(input_list)
+    worksheet_to_update.append_row(new_row)
     print(f"{worksheet} worksheet updated successfully\n")
 
 
@@ -190,9 +190,11 @@ def calculate_stock_figures(input_lists):
 
 def order_new_stock(new_stock_figures):
     """
-    Retrieves data and displays stock to order in a table.
+    Retrieves data and displays stock to order
+    in a table.
     table from PrettyTable. 
-    knowledge gained from PrettyTable official documentation.
+    knowledge gained from PrettyTable official
+    documentation.
     """
     
     print("Retrieving stock to order...\n")
@@ -224,14 +226,14 @@ def run_application():
     Runs all functions, loops and displays 
     menu until option 4 selected.
     """
-    add_date_to_data()
-    # headers = fetch_headers()
+    headers = fetch_headers()
+    new_row = add_date_to_data(headers)
     # input_list = user_input_flavours(headers)
-    # update_worksheet(input_list, "sales")
-    # sales_columns = get_last_5_figures_sales()
-    # new_stock_figures = calculate_stock_figures(sales_columns)
-    # update_worksheet(new_stock_figures, "stock")
-    # order_new_stock(new_stock_figures)
+    update_worksheet(new_row, "sales")
+    sales_columns = get_last_5_figures_sales()
+    new_stock_figures = calculate_stock_figures(sales_columns)
+    update_worksheet(new_stock_figures, "stock")
+    order_new_stock(new_stock_figures)
 
 
 def how_to_use():
