@@ -65,13 +65,10 @@ def fetch_stock_data():
     """
     stock_worksheet = SHEET.worksheet("stock")
     stock_data = stock_worksheet.get_all_values()
-    
     table = PrettyTable()
-    table.field_names = stock_data[0]  # Assuming the first row is the header
-    
+    table.field_names = stock_data[0]
     for row in stock_data[1:]:
         table.add_row(row)
-    
     print(table)
 
 
@@ -79,7 +76,6 @@ def add_date_to_data(headers):
     default_start_date = datetime(2024, 8, 1)
     sales = SHEET.worksheet("sales")
     data = sales.get_all_values()
-    
     last_date_str = None
     for row in reversed(data):
         if row[0]:
@@ -96,12 +92,8 @@ def add_date_to_data(headers):
         next_date = last_date + timedelta(days=1)
     else:
         next_date = default_start_date
-    print("DEBUG: LAST DATE:", last_date_str)
-    print("DEBUG: NEXT DATE TO BE ADDED:", next_date.strftime("%Y-%m-%d"))
-    
     user_values = user_input_flavours(headers)
     new_row = [next_date.strftime("%Y-%m-%d")] + user_values
-    print("DEBUG: NEW ROW TO BE ADDED:", new_row)
 
     return new_row
 
@@ -138,7 +130,6 @@ def fetch_headers():
     # Retrieves headers from the spreadsheet.
     worksheet = SHEET.worksheet('sales')
     headers = worksheet.row_values(1)[1:]
-    print("DEBUG: Headers Fetched:", headers)
     return headers
 
 
@@ -167,10 +158,13 @@ def user_input_flavours(headers):
                     print(f"'{value}' is not valid. Please try again.")
         return list(headers_fetched.values())
 
+
 """
 some functions below are inspired by the love sandwiches walkthrough
-unless otherwise stated within the following code. 
+unless otherwise stated within the following code.
 """
+
+
 def update_worksheet(new_row, worksheet):
     # updates multiple worksheets
     print(f"\nUpdating {worksheet} worksheet... \n")
@@ -195,7 +189,7 @@ def calculate_stock_figures(input_lists):
     Calculates average figures, provides stock recommendations.
     isinstance reviewed from W3Schools
     use of Replit for debug see "TESTING.md" for more information.
-    """ 
+    """
     print("Calculating Stock Figures Please Wait...\n")
     new_stock_figures = []
     for column in input_lists:
@@ -214,12 +208,10 @@ def calculate_stock_figures(input_lists):
 def order_new_stock(new_stock_figures):
     """
     Retrieves data and displays stock to order
-    in a table.
-    table from PrettyTable. 
-    knowledge gained from PrettyTable official
-    documentation.
+    in a table using PrettyTable.
+    how to use and implement gained from PrettyTable
+    official documentation.
     """
-    
     print("Retrieving stock to order...\n")
     stock = SHEET.worksheet("stock").get_all_values()
     headers = stock[0]
@@ -246,7 +238,7 @@ def run_application():
     function changed to ensure smooth application
     running from developing the main menu
     display function.
-    Runs all functions, loops and displays 
+    Runs all functions, loops and displays
     menu until option 4 selected.
     """
     headers = fetch_headers()
