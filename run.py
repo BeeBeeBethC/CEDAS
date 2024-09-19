@@ -25,7 +25,8 @@ def display_menu():
     print("Press '3' display data from a specific date.")
     print("(Pressing '3' also provides all data in a table if date\
            entered is before 2024-08-01)\n")
-    print("Press '4' to Exit.\n")
+    print("Press '4' to fetch stock data.\n")
+    print("Press '5' to Exit.\n")
 
 
 def handle_menu_choice(choice):
@@ -47,11 +48,31 @@ def handle_menu_choice(choice):
     elif choice == "4":
         print("Option 4 selected.")
         print("---------------------------------------------------")
+        fetch_stock_data()
+    elif choice == "5":
+        print("Option 5 selected.")
+        print("---------------------------------------------------")
         print("Thank you for Using CEDAS\n")
         print("Exiting program now.")
     else:
-        print("\nInvalid choice. Please press a Number '1' '2' '3' or '4'.\n")
+        print("\nInvalid choice. Press a Number '1' '2' '3' '4' or '5'.\n")
         print("\nAlternatively Press '2' to review Instructions.\n")
+
+
+def fetch_stock_data():
+    """
+    Retrieves and prints all data from the "stock" worksheet.
+    """
+    stock_worksheet = SHEET.worksheet("stock")
+    stock_data = stock_worksheet.get_all_values()
+    
+    table = PrettyTable()
+    table.field_names = stock_data[0]  # Assuming the first row is the header
+    
+    for row in stock_data[1:]:
+        table.add_row(row)
+    
+    print(table)
 
 
 def add_date_to_data(headers):
@@ -240,22 +261,22 @@ def run_application():
 def how_to_use():
     # Instructions, how to use S-DAS
     print("---------------------------------------------------")
-    print("\nSelect function from menu options using numbers 1-4")
+    print("Select function from menu options using numbers 1-4")
     print("Press Enter.")
     print("---------------------------------------------------")
-    print("\nOption 1, Type in latest sales figures")
+    print("Option 1, Type in latest sales figures")
     print("CEDAS asks for values correspoding to cheesecake flavours")
     print("Allow the application to run until the menu options show")
     print("---------------------------------------------------")
     print("Option 2, Takes you to instructions on how to use CEDAS")
     print("---------------------------------------------------")
-    print("\nOption 3, Users can fetch data from a set date.")
-    print("NOTE: CEDAS returns values for after 01-09-2024 only")
-    print("Enter a date from 01-01-2024 in format YYYY-MM_DD")
-          
+    print("Option 3, Users can fetch data from a set date.")
+    print("NOTE: CEDAS returns values after 01-08-2024 only")
+    print("Enter a date from 01-08-2024 in format YYYY-MM-DD")
+    print("Option 4 retrieves all stock data")
     print("---------------------------------------------------")
-    print("Option 4 Exits the programme.")
-    print("NOTE: CEDAS asks for values until option 4 is selected")
+    print("Option 5 Exits the programme.")
+    print("NOTE: CEDAS asks for values until option 5 is selected")
 
 
 def main():
@@ -264,7 +285,7 @@ def main():
         display_menu()
         choice = input("\nSelect your Option: \n")
         handle_menu_choice(choice)
-        if choice == "4":
+        if choice == "5":
             break
 
 
