@@ -23,8 +23,7 @@ def display_menu():
     print("Press '1' to run the application\n")
     print("Press '2' for Instructions\n")
     print("Press '3' display data from a specific date.")
-    print("(Pressing '3' also provides all data in a table if date entered is \
-           before 2024-08-01)\n")
+    print("('3' shows all data if date entered is before 2024-08-01)\n")
     print("Press '4' to fetch stock data.\n")
     print("Press '5' to Exit.\n")
 
