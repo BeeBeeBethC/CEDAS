@@ -237,6 +237,8 @@ For a deeper understanding of Python following LMS completion and to confirm and
 
 I also used Replit for debugging purposes specifically spotting a typo error that id completely missed during the creation of this project. 
 
+try, Except statement reviewed from W3Schools here: (https://www.w3schools.com/python/python_try_except.asp)
+
 ### Media
 screednshots used in this project are all authors own.
 ### Acknowledgements
